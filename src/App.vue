@@ -1,11 +1,33 @@
 <template>
   <div id="nav">
-    <router-link to="/">Home</router-link> |
-    <router-link to="/about">About</router-link>
+    <main-menu-links-panel :links="menuLinks" />
   </div>
   <router-view/>
 </template>
 
+<script lang="ts">
+import {Options, Vue} from 'vue-class-component';
+import {RouteRecord} from "vue-router";
+import {MainMenuLink} from "@/MainMenuLink";
+import MainMenuLinksPanel from "@/components/MainMenuLinksPanel.vue";
+
+@Options({
+  components: {MainMenuLinksPanel},
+  props: {
+    msg: String
+  }
+})
+export default class App extends Vue {
+  menuLinks:Array<MainMenuLink> = [];
+
+  created() {
+    let links:MainMenuLink[] = this.$router.getRoutes().map((route:RouteRecord):MainMenuLink => {return {path: route.path, name: route.name?.toString() || ""}})
+    console.log("links", links);
+    this.menuLinks = links;
+  }
+}
+
+</script>
 <style lang="scss">
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
